@@ -38,11 +38,22 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-06-30',
 
   nitro: {
-    hooks: {
-      async compiled(nitro: Nitro) {
-        // web-push is loaded via createRequire and never traced into the
-        // serverless function's dependencies, so inject it explicitly into
-        // the generated function package.json for the netlify preset.
+    storage: {
+      notifications: (process.env.NITRO_PRESET === 'netlify' || process.env.NETLIFY === 'true')
+        ? { driver: 'netlify-blobs', name: 'sv-notifications' }
+        : { driver: 'fs', base: join(process.cwd(), '.data', 'notifications') }
+    }
+  },
+
+  hooks: {
+    'nitro:init'(nitro: Nitro) {
+      // web-push is loaded via createRequire and never traced into the
+      // serverless function's dependencies, so inject it explicitly into
+      // the generated function package.json for the netlify preset. This is
+      // registered additively (not via nitro.hooks config) so the preset's
+      // own `compiled` hook — which writes the function's server.mjs entry
+      // and its `path: "/*"` routing config — is preserved.
+      nitro.hooks.hook('compiled', async () => {
         const serverPkgPath = join(nitro.options.output.dir, 'server', 'package.json')
         if (!existsSync(serverPkgPath) || !webPushVersion) return
         const pkg = JSON.parse(await readFile(serverPkgPath, 'utf8')) as { dependencies?: Record<string, string> }
@@ -52,12 +63,7 @@ export default defineNuxtConfig({
           await writeFile(serverPkgPath, `${JSON.stringify(pkg, null, 2)}\n`)
           console.log(`[nitro] injected web-push@${webPushVersion} into server function deps`)
         }
-      }
-    },
-    storage: {
-      notifications: (process.env.NITRO_PRESET === 'netlify' || process.env.NETLIFY === 'true')
-        ? { driver: 'netlify-blobs', options: { name: 'sv-notifications' } }
-        : { driver: 'fs', base: join(process.cwd(), '.data', 'notifications') }
+      })
     }
   },
 
