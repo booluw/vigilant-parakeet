@@ -6,11 +6,13 @@ useSeoMeta({
 })
 
 const { ids, add, remove, clear, max } = useMultiView()
-const cols = ref(1)
+const cols = ref(2)
 
 const { data: liveMatches, refresh } = useFetch<APIMatch[]>('/api/matches/live', { watch: false })
 
-const addable = computed(() => (liveMatches.value ?? []).filter(m => !ids.value.includes(m.id)))
+const hasAdminSource = (m: APIMatch) => m.sources.some(s => s.source === 'admin')
+
+const addable = computed(() => (liveMatches.value ?? []).filter(m => hasAdminSource(m) && !ids.value.includes(m.id)))
 
 const search = ref('')
 
@@ -79,7 +81,7 @@ function pick(id: string) {
                   v-if="filteredAddable.length === 0"
                   class="px-2 py-4 text-center text-sm text-(--ui-text-muted)"
                 >
-                  {{ search ? 'No matches match your search.' : 'Every live match is already added.' }}
+                  {{ search ? 'No matches match your search.' : 'No matches with an active stream left to add.' }}
                 </p>
               </div>
             </div>

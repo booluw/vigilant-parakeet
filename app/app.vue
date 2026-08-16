@@ -42,6 +42,14 @@ useSeoMeta({
 
       <template #right>
         <UButton
+          icon="i-lucide-search"
+          color="neutral"
+          variant="ghost"
+          aria-label="Search matches"
+          title="Search matches"
+          to="/search"
+        />
+        <UButton
           icon="i-lucide-layout-grid"
           color="neutral"
           variant="ghost"

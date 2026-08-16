@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { APIMatch } from '~/types/api'
+
 useSeoMeta({
   title: 'Live matches — SportViewer'
 })
@@ -23,8 +25,8 @@ const {
 const { favoriteTeams, toggleTeam } = useFavorites()
 
 const sportTabs = computed(() => [
-  { key: 'all', label: 'All' },
-  ...sports.value.map(s => ({ key: s.id, label: s.name }))
+  { value: 'all', label: 'All' },
+  ...sports.value.map(s => ({ value: s.id, label: s.name }))
 ])
 
 const modeItems = [
@@ -45,7 +47,12 @@ const favoriteMatches = computed(() => {
   })
 })
 
-const displayedMatches = computed(() => (onlyFavoriteTeams.value ? favoriteMatches.value : filteredMatches.value))
+const hasAdminSource = (m: APIMatch) => m.sources.some(s => s.source === 'admin')
+
+const displayedMatches = computed(() => {
+  const base = onlyFavoriteTeams.value ? favoriteMatches.value : filteredMatches.value
+  return base.filter(hasAdminSource)
+})
 
 const pageTitle = computed(() => (mode.value === 'live' ? 'Live matches' : 'Today\'s matches'))
 
@@ -137,14 +144,11 @@ onMounted(() => {
           class="size-3.5 text-(--ui-text-muted) transition group-hover:text-(--ui-error)"
         />
       </button>
-      <UToggle
+      <USwitch
         v-model="onlyFavoriteTeams"
         size="sm"
-        :aria-label="'Only show matches with my teams'"
+        label="Only my teams"
       />
-      <span class="text-sm text-(--ui-text-muted)">
-        Only my teams
-      </span>
     </div>
 
     <div class="mt-6">
@@ -171,7 +175,7 @@ onMounted(() => {
         v-else-if="displayedMatches.length === 0"
         icon="i-lucide-tv"
         :title="search ? 'No matches match your search' : (onlyFavoriteTeams ? 'No live matches from your teams' : (mode === 'live' ? 'No live matches right now' : 'No matches scheduled today'))"
-        :description="onlyFavoriteTeams ? 'Try disabling the \'Only my teams\' filter.' : 'Check back in a bit — matches go live throughout the day.'"
+        :description="onlyFavoriteTeams ? 'Try disabling the \'Only my teams\' filter.' : 'Only matches with an available stream are listed — check back in a bit.'"
       />
 
       <div

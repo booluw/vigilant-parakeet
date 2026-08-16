@@ -54,6 +54,7 @@ export default defineNuxtConfig({
       icons: [
         'lucide:tv-minimal-play',
         'lucide:search',
+        'lucide:search-x',
         'lucide:refresh-cw',
         'lucide:flame',
         'lucide:shield',
