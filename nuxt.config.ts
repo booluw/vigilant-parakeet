@@ -1,8 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { execSync } from 'node:child_process'
 import { existsSync, readFileSync } from 'node:fs'
-import { readFile, writeFile } from 'node:fs/promises'
+import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import type { Nitro } from 'nitropack'
+
+const FALLBACK_IMPORT_META = 'globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env}'
+const REAL_IMPORT_META = 'globalThis._importMeta_={url:import.meta.url,env:process.env}'
 
 const rootPkg = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf8')) as { dependencies?: Record<string, string> }
 const webPushVersion = rootPkg.dependencies?.['web-push']
@@ -54,14 +58,37 @@ export default defineNuxtConfig({
       // own `compiled` hook — which writes the function's server.mjs entry
       // and its `path: "/*"` routing config — is preserved.
       nitro.hooks.hook('compiled', async () => {
-        const serverPkgPath = join(nitro.options.output.dir, 'server', 'package.json')
-        if (!existsSync(serverPkgPath) || !webPushVersion) return
+        if (nitro.options.preset !== 'netlify' || !webPushVersion) return
+        const serverDir = join(nitro.options.output.dir, 'server')
+        const serverPkgPath = join(serverDir, 'package.json')
+        if (!existsSync(serverPkgPath)) return
+
         const pkg = JSON.parse(await readFile(serverPkgPath, 'utf8')) as { dependencies?: Record<string, string> }
         pkg.dependencies = pkg.dependencies || {}
         if (!pkg.dependencies['web-push']) {
           pkg.dependencies['web-push'] = webPushVersion
           await writeFile(serverPkgPath, `${JSON.stringify(pkg, null, 2)}\n`)
           console.log(`[nitro] injected web-push@${webPushVersion} into server function deps`)
+        }
+
+        const chunksDir = join(serverDir, 'chunks')
+        const entryFiles = [join(serverDir, 'main.mjs'), ...(await readdir(chunksDir, { recursive: true }))
+          .filter(f => typeof f === 'string' && f.endsWith('.mjs'))
+          .map(f => join(chunksDir, f))]
+        for (const file of entryFiles) {
+          const content = await readFile(file, 'utf8')
+          if (content.includes(FALLBACK_IMPORT_META)) {
+            await writeFile(file, content.replace(FALLBACK_IMPORT_META, REAL_IMPORT_META))
+            console.log(`[nitro] patched import.meta shim in ${file.replace(join(nitro.options.output.dir, 'server', ''), '')}`)
+          }
+        }
+
+        if (!existsSync(join(serverDir, 'node_modules', 'web-push', 'package.json'))) {
+          execSync(`npm install --no-save --omit=dev --no-audit --no-fund web-push@${webPushVersion}`, {
+            cwd: serverDir,
+            stdio: 'inherit'
+          })
+          console.log(`[nitro] installed web-push@${webPushVersion} into server function node_modules`)
         }
       })
     }
