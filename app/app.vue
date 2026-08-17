@@ -29,6 +29,7 @@ useSeoMeta({
 })
 
 usePwaUpdate()
+useShortcutsManifest()
 </script>
 
 <template>

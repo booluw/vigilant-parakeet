@@ -79,6 +79,13 @@ watch(mode, (m) => {
 
 onMounted(() => {
   startAutoRefresh()
+
+  const route = useRoute()
+  const favTeam = route.query.favTeam as string | undefined
+  if (favTeam) {
+    onlyFavoriteTeams.value = true
+    navigateTo('/', { replace: true })
+  }
 })
 </script>
 
