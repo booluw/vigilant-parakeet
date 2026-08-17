@@ -189,7 +189,7 @@ const awayBadge = computed(() => badgeImage(away.value?.badge))
             class="group flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition"
             :class="selectedStream?.id === stream.id && selectedStream?.streamNo === stream.streamNo
               ? 'border-(--ui-primary) bg-(--ui-primary)/10 text-(--ui-primary)'
-              : 'border-(--ui-border) hover:border-(--ui-primary)/40'"
+              : 'border-(--ui-border) hover:border-(--ui-text-muted)/30'"
             @click="select(stream)"
           >
             <UIcon

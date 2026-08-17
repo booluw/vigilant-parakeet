@@ -106,7 +106,7 @@ watch(() => props.matchId, init)
         class="flex items-center gap-1 rounded border px-2 py-0.5 text-xs transition"
         :class="selected?.id === stream.id && selected?.streamNo === stream.streamNo
           ? 'border-(--ui-primary) bg-(--ui-primary)/10 text-(--ui-primary)'
-          : 'border-(--ui-border) hover:border-(--ui-primary)/40'"
+          : 'border-(--ui-border) hover:border-(--ui-text-muted)/30'"
         @click="select(stream)"
       >
         <span>{{ stream.source }}</span>

@@ -24,7 +24,7 @@ function open() {
 
 <template>
   <UCard
-    class="cursor-pointer transition hover:-translate-y-0.5 hover:border-(--ui-primary)/40"
+    class="cursor-pointer transition hover:-translate-y-0.5 hover:border-(--ui-text-muted)/20"
     :ui="{ body: 'p-0' }"
     @click="open"
   >

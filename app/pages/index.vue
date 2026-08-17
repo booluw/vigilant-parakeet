@@ -135,7 +135,7 @@ onMounted(() => {
       <button
         v-for="team in favTeamNames"
         :key="team.name"
-        class="group flex items-center gap-1.5 rounded-full border border-(--ui-border) py-1 pr-1.5 pl-2.5 text-sm transition hover:border-(--ui-primary)/40"
+        class="group flex items-center gap-1.5 rounded-full border border-(--ui-text-muted)/20 py-1 pr-1.5 pl-2.5 text-sm transition hover:border-(--ui-text-muted)/40"
         @click="toggleTeam(team)"
       >
         <span class="max-w-32 truncate">{{ team.name }}</span>
