@@ -1,42 +1,61 @@
 <template>
   <span class="inline-flex items-center gap-2">
-    <span class="grid size-8 place-items-center rounded-lg bg-(--ui-primary) text-white">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="size-5"
-      >
-        <rect
-          x="2"
-          y="4"
-          width="20"
-          height="14"
-          rx="2"
-        />
-        <polygon
-          points="10,8 16,11 10,14"
-          fill="currentColor"
-          stroke="none"
-        />
-        <line
-          x1="8"
-          y1="21"
-          x2="16"
-          y2="21"
-        />
-        <line
-          x1="12"
-          y1="18"
-          x2="12"
-          y2="21"
-        />
-      </svg>
-    </span>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+      class="size-8"
+    >
+      <defs>
+        <linearGradient
+          id="s3m-icon-bg"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="100%"
+        >
+          <stop
+            offset="0%"
+            stop-color="#0076B6"
+          />
+          <stop
+            offset="100%"
+            stop-color="#005A8A"
+          />
+        </linearGradient>
+      </defs>
+      <rect
+        width="512"
+        height="512"
+        rx="108"
+        fill="url(#s3m-icon-bg)"
+      />
+      <text
+        x="256"
+        y="310"
+        font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+        font-size="220"
+        font-weight="800"
+        fill="white"
+        text-anchor="middle"
+        letter-spacing="-8"
+      >S3m</text>
+      <polygon
+        points="390,210 390,290 450,250"
+        fill="white"
+        opacity="0.95"
+      />
+      <text
+        x="256"
+        y="420"
+        font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+        font-size="100"
+        font-weight="600"
+        fill="white"
+        text-anchor="middle"
+        opacity="0.85"
+        letter-spacing="24"
+      >TV</text>
+    </svg>
     <span class="font-bold tracking-tight">S3mTV</span>
   </span>
 </template>

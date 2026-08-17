@@ -7,7 +7,8 @@ useHead({
     { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' }
   ],
   link: [
-    { rel: 'icon', href: '/favicon.ico' },
+    { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+    { rel: 'icon', href: '/favicon.ico', sizes: '32x32' },
     { rel: 'manifest', href: '/manifest.webmanifest' },
     { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }
   ],
