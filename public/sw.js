@@ -1,3 +1,5 @@
+const SW_VERSION = '1.0.1'
+
 self.addEventListener('install', () => {
   self.skipWaiting()
 })
@@ -45,6 +47,10 @@ self.addEventListener('notificationclick', (event) => {
 })
 
 self.addEventListener('message', (event) => {
+  if (event.data?.type === 'getVersion') {
+    event.source.postMessage({ type: 'version', version: SW_VERSION })
+    return
+  }
   if (event.data?.type === 'notify') {
     const data = event.data.payload || {}
     notify(data.title || 'S3mTV', {

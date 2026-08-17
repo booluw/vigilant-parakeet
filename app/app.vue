@@ -27,6 +27,8 @@ useSeoMeta({
   ogDescription: description,
   twitterCard: 'summary'
 })
+
+usePwaUpdate()
 </script>
 
 <template>
