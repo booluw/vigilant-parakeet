@@ -56,6 +56,7 @@ onBeforeUnmount(clearLoadTimeout)
     <iframe
       :key="key"
       :src="stream.embedUrl"
+      sandbox="allow-scripts allow-same-origin"
       class="size-full border-0"
       allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
       allowfullscreen

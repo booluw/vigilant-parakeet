@@ -5,7 +5,7 @@ const props = defineProps<{
   stream: APIStream
 }>()
 
-const engine = ref<'iframe' | 'hls'>('iframe')
+const engine = ref<'iframe' | 'hls'>('hls')
 const hlsFellBack = ref(false)
 const iframeFailed = ref(false)
 const toast = useToast()
@@ -30,8 +30,8 @@ function onHlsFallback() {
   engine.value = 'iframe'
   hlsFellBack.value = true
   toast.add({
-    title: 'Experimental player unavailable',
-    description: 'Fell back to the embedded player.',
+    title: 'HLS unavailable',
+    description: 'Fell back to the embedded player (may show ads).',
     color: 'warning'
   })
 }
@@ -67,13 +67,13 @@ async function copyLink() {
           v-model="engine"
           size="xs"
           :items="[{
+            label: 'HLS (ad-free)',
+            value: 'hls',
+            icon: 'i-lucide-play'
+          }, {
             label: 'Embed',
             value: 'iframe',
             icon: 'i-lucide-box'
-          }, {
-            label: 'HLS (experimental)',
-            value: 'hls',
-            icon: 'i-lucide-flask-conical'
           }]"
         />
         <UButton
@@ -88,15 +88,15 @@ async function copyLink() {
     </div>
 
     <div class="aspect-video w-full overflow-hidden rounded-lg border border-(--ui-border) bg-black">
-      <PlayerIframe
-        v-if="engine === 'iframe'"
-        :stream="stream"
-        @error="onIframeError"
-      />
       <PlayerHls
-        v-else
+        v-if="engine === 'hls'"
         :stream="stream"
         @fallback="onHlsFallback"
+      />
+      <PlayerIframe
+        v-else
+        :stream="stream"
+        @error="onIframeError"
       />
     </div>
 
@@ -104,7 +104,7 @@ async function copyLink() {
       v-if="hlsFellBack"
       class="mt-2 text-xs text-(--ui-text-muted)"
     >
-      The HLS resolver is experimental and could not extract a direct stream URL for this source.
+      HLS could not resolve a direct stream URL for this source. Fell back to the embedded player.
     </p>
   </div>
 </template>
