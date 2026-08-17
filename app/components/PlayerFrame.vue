@@ -63,20 +63,22 @@ async function copyLink() {
       </UBadge>
 
       <div class="flex items-center gap-2">
-        <span class="text-xs text-(--ui-text-muted)">Player</span>
-        <USegmented
-          v-model="engine"
-          size="sm"
-          :items="[{
-            label: 'HLS (ad-free)',
-            value: 'hls',
-            icon: 'i-lucide-play'
-          }, {
-            label: 'Embed',
-            value: 'iframe',
-            icon: 'i-lucide-box'
-          }]"
-        />
+        <UFieldGroup size="xs">
+          <UButton
+            icon="i-lucide-play"
+            label="HLS (ad-free)"
+            :color="engine === 'hls' ? 'primary' : 'neutral'"
+            :variant="engine === 'hls' ? 'solid' : 'outline'"
+            @click="engine = 'hls'"
+          />
+          <UButton
+            icon="i-lucide-box"
+            label="Embed"
+            :color="engine === 'iframe' ? 'primary' : 'neutral'"
+            :variant="engine === 'iframe' ? 'solid' : 'outline'"
+            @click="engine = 'iframe'"
+          />
+        </UFieldGroup>
         <UButton
           icon="i-lucide-link"
           variant="ghost"
