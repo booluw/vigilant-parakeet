@@ -18,7 +18,7 @@
 }
 
 :root.dark {
-  --ui-bg: #2D2D2D;
-  --ui-bg-elevated: #383838;
+  --ui-bg: #1C1C1C;
+  --ui-bg-elevated: #262626;
   --ui-bg-inverted: #E8E8E8;
 }
