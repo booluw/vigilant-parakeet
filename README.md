@@ -1,4 +1,4 @@
-# SportViewer
+# S3mTV
 
 A personal live sports streaming app built with **Nuxt 4**, **Nuxt UI**, and **Tailwind CSS**. It lists live matches from the [Streamed](https://streamed.pk/docs) API and lets you stream them in a player.
 

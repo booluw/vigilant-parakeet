@@ -17,7 +17,7 @@ self.addEventListener('push', (event) => {
   } catch {
     data = {}
   }
-  const title = data.title || 'SportViewer'
+  const title = data.title || 'S3mTV'
   const options = {
     body: data.body || '',
     icon: data.icon || '/pwa-192.png',
@@ -47,7 +47,7 @@ self.addEventListener('notificationclick', (event) => {
 self.addEventListener('message', (event) => {
   if (event.data?.type === 'notify') {
     const data = event.data.payload || {}
-    notify(data.title || 'SportViewer', {
+    notify(data.title || 'S3mTV', {
       body: data.body || '',
       icon: '/pwa-192.png',
       badge: '/pwa-192.png',

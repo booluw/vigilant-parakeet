@@ -19,7 +19,7 @@ export function urlBase64ToUint8Array(base64: string): Uint8Array<ArrayBuffer> {
 }
 
 export function getClientId(): string {
-  const key = 'sv-push-client-id'
+  const key = 's3m-push-client-id'
   let id = localStorage.getItem(key)
   if (!id) {
     id = crypto.randomUUID()

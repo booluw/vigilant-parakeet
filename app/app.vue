@@ -2,7 +2,7 @@
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    { name: 'theme-color', content: '#09090b' },
+    { name: 'theme-color', content: '#2D2D2D' },
     { name: 'apple-mobile-web-app-capable', content: 'yes' },
     { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' }
   ],
@@ -16,7 +16,7 @@ useHead({
   }
 })
 
-const title = 'SportViewer'
+const title = 'S3mTV'
 const description = 'Personal live sports streaming app powered by the Streamed API.'
 
 useSeoMeta({
@@ -34,7 +34,7 @@ useSeoMeta({
       <template #left>
         <NuxtLink
           to="/"
-          aria-label="SportViewer home"
+          aria-label="S3mTV home"
         >
           <AppLogo class="w-auto" />
         </NuxtLink>

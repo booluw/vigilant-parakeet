@@ -2,7 +2,7 @@
 import type { APIMatch } from '~/types/api'
 
 useSeoMeta({
-  title: 'Multi-view — SportViewer'
+  title: 'Multi-view — S3mTV'
 })
 
 const { ids, add, remove, clear, max } = useMultiView()

@@ -1,4 +1,4 @@
-const STORAGE = 'sv-multiview'
+const STORAGE = 's3m-multiview'
 const MAX = 4
 
 export function useMultiView() {

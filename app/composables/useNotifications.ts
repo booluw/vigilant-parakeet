@@ -1,7 +1,7 @@
 import type { APIMatch } from '~/types/api'
 
 const FALLBACK_REFRESH = 60_000
-const SEEN_KEY = 'sv-notify-seen'
+const SEEN_KEY = 's3m-notify-seen'
 
 type NotifStatus = 'unsupported' | 'idle' | 'denied' | 'subscribed' | 'fallback' | 'busy'
 
@@ -52,22 +52,41 @@ export function useNotifications() {
       const live = await $fetch<APIMatch[]>('/api/matches/live')
       const seen = readStoredJSON<string[]>(SEEN_KEY, [])
       const favNames = Object.values(favoriteTeams.value).map(t => t.name.toLowerCase())
-      const interested = live.filter((m) => {
-        const names = [m.teams?.home?.name, m.teams?.away?.name].map(n => n?.toLowerCase())
-        return names.some(n => n && favNames.includes(n)) || favoriteMatches.value.includes(m.id)
+
+      const newly = live.filter((m) => {
+        if (seen.includes(m.id)) return false
+        const home = m.teams?.home?.name?.toLowerCase()
+        const away = m.teams?.away?.name?.toLowerCase()
+        const isTeam = (home && favNames.includes(home)) || (away && favNames.includes(away))
+        const isMatch = favoriteMatches.value.includes(m.id)
+        return isTeam || isMatch
       })
-      const newly = interested.filter(m => !seen.includes(m.id))
+
       if (newly.length) {
         const reg = await navigator.serviceWorker.ready
         for (const m of newly) {
+          const home = m.teams?.home?.name
+          const away = m.teams?.away?.name
+          const homeLower = home?.toLowerCase()
+          const awayLower = away?.toLowerCase()
+
+          let title: string
+          let body: string
+
+          if (homeLower && favNames.includes(homeLower)) {
+            title = `Your team ${home} is about to play ${away || 'TBD'}.`
+            body = 'Come and cheer them on!'
+          } else if (awayLower && favNames.includes(awayLower)) {
+            title = `Your team ${away} is about to play ${home || 'TBD'}.`
+            body = 'Come and cheer them on!'
+          } else {
+            title = `${home || 'Home'} vs. ${away || 'Away'} is about to start.`
+            body = 'Grab your virtual stadium seat.'
+          }
+
           reg.active?.postMessage({
             type: 'notify',
-            payload: {
-              title: `${m.title} is LIVE`,
-              body: m.category || 'Live now',
-              tag: `live-${m.id}`,
-              data: { url: `/match/${m.id}` }
-            }
+            payload: { title, body, tag: `live-${m.id}`, data: { url: `/match/${m.id}` } }
           })
         }
       }

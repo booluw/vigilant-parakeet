@@ -44,7 +44,7 @@ export default defineNuxtConfig({
   nitro: {
     storage: {
       notifications: (process.env.NITRO_PRESET === 'netlify' || process.env.NETLIFY === 'true')
-        ? { driver: 'netlify-blobs', name: 'sv-notifications' }
+        ? { driver: 'netlify-blobs', name: 's3m-notifications' }
         : { driver: 'fs', base: join(process.cwd(), '.data', 'notifications') }
     }
   },

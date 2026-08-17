@@ -56,12 +56,55 @@ function configureVapid(): boolean {
   return true
 }
 
-function matchesInterests(match: LiveMatch, favorites: FavoritesPayload): boolean {
-  if (favorites.matches.includes(match.id)) return true
-  const names = [match.teams?.home?.name, match.teams?.away?.name]
-    .map(n => n?.toLowerCase())
-    .filter(Boolean) as string[]
-  return names.some(n => favorites.teams.some(t => t.toLowerCase() === n))
+interface TeamInterest {
+  type: 'team'
+  teamName: string
+  opposition: string
+}
+
+interface MatchInterest {
+  type: 'match'
+}
+
+type MatchInterest = TeamInterest | MatchInterest | null
+
+function getMatchInterest(match: LiveMatch, favorites: FavoritesPayload): MatchInterest {
+  const home = match.teams?.home?.name
+  const away = match.teams?.away?.name
+
+  const homeLower = home?.toLowerCase()
+  const awayLower = away?.toLowerCase()
+
+  if (homeLower && favorites.teams.some(t => t.toLowerCase() === homeLower)) {
+    return { type: 'team', teamName: home, opposition: away || 'TBD' }
+  }
+
+  if (awayLower && favorites.teams.some(t => t.toLowerCase() === awayLower)) {
+    return { type: 'team', teamName: away, opposition: home || 'TBD' }
+  }
+
+  if (favorites.matches.includes(match.id)) {
+    return { type: 'match' }
+  }
+
+  return null
+}
+
+function composeNotification(match: LiveMatch, interest: MatchInterest): { title: string, body: string } {
+  const home = match.teams?.home?.name || 'Home'
+  const away = match.teams?.away?.name || 'Away'
+
+  if (interest?.type === 'team') {
+    return {
+      title: `Your team ${interest.teamName} is about to play ${interest.opposition}.`,
+      body: 'Come and cheer them on!'
+    }
+  }
+
+  return {
+    title: `${home} vs. ${away} is about to start.`,
+    body: 'Grab your virtual stadium seat.'
+  }
 }
 
 type SendResult = 'sent' | 'expired' | 'error'
@@ -114,14 +157,21 @@ export async function runNotifyCheck(): Promise<NotifyResult> {
     const stateKey = `state/${clientId}`
     const seen = (await storage.getItem<string[]>(stateKey)) ?? []
 
-    const interested = live.filter(m => matchesInterests(m, stored.favorites))
-    const newly = seen.length === 0 ? [] : interested.filter(m => !seen.includes(m.id))
+    const newly = seen.length === 0
+      ? []
+      : live.filter((m) => {
+          if (seen.includes(m.id)) return false
+          return getMatchInterest(m, stored.favorites) !== null
+        })
 
     let expired = false
     for (const match of newly) {
+      const interest = getMatchInterest(match, stored.favorites)
+      if (!interest) continue
+      const { title, body } = composeNotification(match, interest)
       const outcome = await sendPush(stored.subscription, {
-        title: `${match.title} is LIVE`,
-        body: match.category || 'Live now',
+        title,
+        body,
         tag: `live-${match.id}`,
         data: { url: `/match/${match.id}` }
       })

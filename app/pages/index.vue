@@ -2,7 +2,7 @@
 import type { APIMatch } from '~/types/api'
 
 useSeoMeta({
-  title: 'Live matches — SportViewer'
+  title: 'Live matches — S3mTV'
 })
 
 const {

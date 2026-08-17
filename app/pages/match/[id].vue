@@ -23,7 +23,7 @@ onMounted(async () => {
 })
 
 useSeoMeta({
-  title: () => (match.value ? `${match.value.title} — SportViewer` : 'SportViewer')
+  title: () => (match.value ? `${match.value.title} — S3mTV` : 'S3mTV')
 })
 
 async function refreshStreams() {

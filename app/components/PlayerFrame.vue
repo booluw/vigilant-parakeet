@@ -1,23 +1,29 @@
 <script setup lang="ts">
 import type { APIStream } from '~/types/api'
 
-defineProps<{
+const props = defineProps<{
   stream: APIStream
 }>()
 
 const engine = ref<'iframe' | 'hls'>('iframe')
 const hlsFellBack = ref(false)
+const iframeFailed = ref(false)
 const toast = useToast()
 
 onMounted(() => {
-  const saved = localStorage.getItem('sv-player-engine')
+  const saved = localStorage.getItem('s3m-player-engine')
   if (saved === 'hls' || saved === 'iframe') {
     engine.value = saved
   }
 })
 
 watch(engine, (v) => {
-  localStorage.setItem('sv-player-engine', v)
+  localStorage.setItem('s3m-player-engine', v)
+})
+
+watch(() => props.stream, () => {
+  iframeFailed.value = false
+  hlsFellBack.value = false
 })
 
 function onHlsFallback() {
@@ -26,6 +32,16 @@ function onHlsFallback() {
   toast.add({
     title: 'Experimental player unavailable',
     description: 'Fell back to the embedded player.',
+    color: 'warning'
+  })
+}
+
+function onIframeError() {
+  if (iframeFailed.value) return
+  iframeFailed.value = true
+  toast.add({
+    title: 'Stream unavailable',
+    description: 'The embed failed to load. Try switching to another stream.',
     color: 'warning'
   })
 }
@@ -75,6 +91,7 @@ async function copyLink() {
       <PlayerIframe
         v-if="engine === 'iframe'"
         :stream="stream"
+        @error="onIframeError"
       />
       <PlayerHls
         v-else

@@ -1,12 +1,12 @@
 {
-  "name": "SportViewer",
-  "short_name": "SportViewer",
+  "name": "S3mTV",
+  "short_name": "S3mTV",
   "description": "Personal live sports streaming app.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#09090b",
-  "theme_color": "#09090b",
+  "background_color": "#2D2D2D",
+  "theme_color": "#2D2D2D",
   "lang": "en",
   "icons": [
     {

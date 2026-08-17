@@ -1,7 +1,7 @@
 import type { APIMatchTeam } from '~/types/api'
 
-const STORAGE_TEAMS = 'sv-fav-teams'
-const STORAGE_MATCHES = 'sv-fav-matches'
+const STORAGE_TEAMS = 's3m-fav-teams'
+const STORAGE_MATCHES = 's3m-fav-matches'
 
 export function useFavorites() {
   const favoriteTeams = useState<Record<string, APIMatchTeam>>('fav-teams', () => ({}))
