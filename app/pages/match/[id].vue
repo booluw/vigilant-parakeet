@@ -89,14 +89,6 @@ const awayBadge = computed(() => badgeImage(away.value?.badge))
               </span>
               LIVE
             </UBadge>
-            <UBadge
-              v-if="match.popular"
-              color="warning"
-              variant="subtle"
-              icon="i-lucide-flame"
-            >
-              Popular
-            </UBadge>
           </div>
           <h1 class="mt-2 text-xl font-bold tracking-tight sm:text-2xl">
             {{ match.title }}

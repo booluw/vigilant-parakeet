@@ -99,14 +99,6 @@ function open() {
         >
           Starts {{ matchTime(match.date) }}
         </UBadge>
-        <UBadge
-          v-if="match.popular"
-          color="warning"
-          variant="subtle"
-          icon="i-lucide-flame"
-        >
-          Popular
-        </UBadge>
       </div>
       <div class="absolute top-2 right-2">
         <button
