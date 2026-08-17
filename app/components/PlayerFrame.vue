@@ -31,7 +31,7 @@ function onHlsFallback() {
   hlsFellBack.value = true
   toast.add({
     title: 'HLS unavailable',
-    description: 'Fell back to the embedded player (may show ads).',
+    description: 'Fell back to the embedded player. You can switch players using the toggle above.',
     color: 'warning'
   })
 }
@@ -63,9 +63,10 @@ async function copyLink() {
       </UBadge>
 
       <div class="flex items-center gap-2">
+        <span class="text-xs text-(--ui-text-muted)">Player</span>
         <USegmented
           v-model="engine"
-          size="xs"
+          size="sm"
           :items="[{
             label: 'HLS (ad-free)',
             value: 'hls',
