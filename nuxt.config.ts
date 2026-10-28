@@ -36,7 +36,6 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    '/api/**': { proxy: 'https://streamfree.top/api/v1/**' }
   },
 
   compatibilityDate: '2026-06-30',
