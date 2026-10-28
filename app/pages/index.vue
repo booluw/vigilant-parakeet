@@ -47,11 +47,9 @@ const favoriteMatches = computed(() => {
   })
 })
 
-const hasAdminSource = (m: APIMatch) => m.sources.some(s => s.source === 'admin')
-
 const displayedMatches = computed(() => {
   const base = onlyFavoriteTeams.value ? favoriteMatches.value : filteredMatches.value
-  return base.filter(hasAdminSource)
+  return base
 })
 
 const pageTitle = computed(() => (mode.value === 'live' ? 'Live matches' : 'Today\'s matches'))
