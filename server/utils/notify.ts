@@ -3,7 +3,7 @@ import { createRequire } from 'node:module'
 const require = createRequire(import.meta.url)
 const webpush = require('web-push') as typeof import('web-push')
 
-const STREAMED_API = 'https://streamed.pk'
+const STREAMED_API = 'https://streamfree.top'
 
 export interface PushSubscriptionJSON {
   endpoint: string

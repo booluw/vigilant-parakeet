@@ -1,4 +1,4 @@
-const EMBED_BASE = 'https://embed.st'
+const EMBED_BASE = 'https://strmfree.st'
 
 const M3U8_REGEX = /https?:\/\/[^\s"'<>]+\.m3u8[^\s"'<>]*/g
 

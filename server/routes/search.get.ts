@@ -1,6 +1,6 @@
 import type { APIMatch } from '../../app/types/api'
 
-const STREAMED_API = 'https://streamed.pk'
+const STREAMED_API = 'https://streamfree.top'
 const CACHE_TTL = 30_000
 
 interface SearchMatch extends APIMatch {
